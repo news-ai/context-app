@@ -11,7 +11,7 @@ export default function context(state = initialState, action = {}) {
       return {
         ...state,
         isLoading: false,
-        articles: action.articles[0]
+        articles: action.articles
       }
     default:
       return state;

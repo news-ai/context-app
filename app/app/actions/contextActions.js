@@ -13,7 +13,7 @@ export function getFeed() {
     fetch(contextURL, { method: "GET" }).then(function (response) {
       return response.json();
     }).then(function (responseData) {
-      dispatch(receiveFeed(responseData[0]))
+      dispatch(receiveFeed(responseData.results[0]))
     }).done();
   }
 }

@@ -22,6 +22,10 @@ To run the Android app:
 4. Press the menu button (F2 by default, or `⌘-M` in Genymotion) and select Reload JS to see your change!
 4. Run `adb logcat *:S ReactNative:V ReactNativeJS:V` in a terminal to see your app's logs
 
-To debug iOS app:
+To debug iOS app (on your phone):
+
+1. Charge IP in `ios/contextapp/AppDelegate.m` to computer IP
+
+To debug iOS app (on the simulator):
 
 1. `cmd+D`
