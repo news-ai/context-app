@@ -21,3 +21,7 @@ To run the Android app:
 3. Open `index.android.js` in your text editor of choice and edit some lines.
 4. Press the menu button (F2 by default, or `⌘-M` in Genymotion) and select Reload JS to see your change!
 4. Run `adb logcat *:S ReactNative:V ReactNativeJS:V` in a terminal to see your app's logs
+
+To debug iOS app:
+
+1. `cmd+D`
