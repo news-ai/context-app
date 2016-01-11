@@ -11,21 +11,6 @@ var AlertIndicatorIOS = React.AlertIndicatorIOS;
 var ActivityIndicatorIOS = React.ActivityIndicatorIOS;
 var AlertIOS = React.AlertIOS;
 
-var data = (function () {
-    var _arr = [];
-    for (var i = 0; i <= 100; i++) {
-        _arr.push({
-            "userId": i,
-            "user": "Context",
-            "blog": "http://newsai.com",
-            "github": "https://github.com/newsai"
-        });
-    }
-    return _arr;
-})();
-
-var stickyId = 3;
-
 var contextapp = React.createClass({
     displayName: 'contextapp',
 
@@ -51,47 +36,51 @@ var contextapp = React.createClass({
                 sectionHeaderHasChanged: function sectionHeaderHasChanged(s1, s2) {
                     return s1 !== s2;
                 }
-            })
+            }),
+            isLoading: true
         };
     },
 
     componentWillMount: function componentWillMount() {
-        var res = this.listViewHandleData(data);
-        console.log(res);
-        this.setState({
-            dataSource: this.state.dataSource.cloneWithRowsAndSections(res.dataBlob, res.sectionIDs, res.rowIDs),
-            loaded: true
-        });
+        fetch("http://172.99.68.57/api/feeds", {method: "GET"})
+        .then((response) => response.json())
+        .then((responseData) => {
+            console.log(responseData);
+            var res = this.listViewHandleData(responseData[0]);
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRowsAndSections(res.dataBlob, res.sectionIDs, res.rowIDs),
+                loaded: true
+            });
+        })
+        .done();
     },
 
     listViewHandleData: function listViewHandleData(result) {
-        var me = this,
-            dataBlob = {},
+        var data = {},
             sectionIDs = ['s0', 's1'],
             rowIDs = [[], []],
             key,
-            length = result.length,
-            splitIdx;
+            length = result.articles.length;
 
         for (var i = 0; i < length; i++) {
-            key = result[i]['userId'];
-            if (key === stickyId) {
-                dataBlob['s1'] = result[i];
-                splitIdx = true;
-            } else {
-                if (splitIdx) {
-                    dataBlob['s1:' + key] = result[i];
-                    rowIDs[1].push(key);
-                } else {
-                    dataBlob['s0:' + key] = result[i];
-                    rowIDs[0].push(key);
+            key = result.articles[i];
+            rowIDs[0].push(key);
+            fetch("http://172.99.68.57/api/articles/" + key, {method: "GET"})
+            .then((response) => response.json())
+            .then((responseData) => {
+                data['s0:' + key] = responseData.name;
+            })
+            .done((response) => {
+                if (Object.keys(data).length >= length) {
+                    this.setState({
+                        isLoading: false
+                    });
                 }
-            }
+            });
         }
-        console.log(dataBlob, sectionIDs, rowIDs);
 
         return {
-            dataBlob: dataBlob,
+            dataBlob: data,
             sectionIDs: sectionIDs,
             rowIDs: rowIDs
         };
@@ -102,61 +91,31 @@ var contextapp = React.createClass({
 
         return React.createElement(
             TouchableOpacity,
-            { onPress: function () {
-                    return _this.onPressRow(rowData, sectionID);
-                } },
+                { onPress: function () {}},
             React.createElement(
                 View,
                 { style: styles.rowStyle },
                 React.createElement(
                     Text,
                     { style: styles.rowText },
-                    rowData.userId,
-                    '  ',
-                    rowData.user
+                    rowData,
                 )
             )
         );
     },
 
-    onPressRow: function onPressRow(rowData, sectionID) {
-        var buttons = [{
-            text: 'Cancel'
-        }, {
-            text: 'OK'
-        }];
-        AlertIOS.alert('User\'s Blog is ' + rowData.blog, null, null);
-    },
-
-    renderSectionHeader: function renderSectionHeader(sectionData, sectionID) {
-        if (sectionData && sectionData['userId'] === stickyId) {
-            return React.createElement(
-                View,
-                { style: [styles.rowStyle, { backgroundColor: '#42B7F3' }] },
-                React.createElement(
-                    Text,
-                    { style: styles.rowText },
-                    sectionData.userId,
-                    '  ',
-                    sectionData.user,
-                    ' ==> ',
-                    sectionData.blog
-                )
-            );
-        } else {
-            return React.createElement(View, null);
-        }
-    },
-
     render: function render() {
         var _this2 = this;
+
+        if (this.state.isLoading) {
+            return <View><Text>Loading...</Text></View>;
+        }
 
         return React.createElement(ListView, {
             dataSource: this.state.dataSource,
             renderRow: function (rowData, sectionID, rowID, highlightRow) {
-                return _this2._renderRow(rowData, sectionID, rowID, highlightRow);
-            },
-            renderSectionHeader: this.renderSectionHeader
+                return _this2._renderRow(rowData);
+            }
         });
     }
 });
@@ -167,7 +126,10 @@ var styles = StyleSheet.create({
         paddingVertical: 20,
         paddingLeft: 16,
         borderBottomColor: '#E0E0E0',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+        height: 60,
+        flexDirection: 'row'
     }
 });
 
