@@ -47,7 +47,6 @@ export default class News extends React.Component {
 
   componentWillMount() {
     var res = this.listViewHandleData(this.props.articles);
-    console.log(res);
     this.setState({
         dataSource: this.dataSource.cloneWithRowsAndSections(res.dataBlob,res.sectionIDs,res.rowIDs),
         loaded: true
@@ -91,9 +90,9 @@ export default class News extends React.Component {
 
     return (
       <ListView
-          dataSource={this.state.dataSource}
-          renderRow={(rowData, sectionID, rowID, highlightRow) => this._renderRow(rowData, sectionID, rowID, highlightRow)}
-          />
+        dataSource={this.state.dataSource}
+        renderRow={(rowData, sectionID, rowID, highlightRow) => this._renderRow(rowData, sectionID, rowID, highlightRow)}
+      />
     );
   }
 }
