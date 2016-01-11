@@ -42,20 +42,22 @@ var contextapp = React.createClass({
     },
 
     componentWillMount: function componentWillMount() {
-        fetch("http://172.99.68.57/api/feeds", {method: "GET"})
-        .then((response) => response.json())
-        .then((responseData) => {
-            console.log(responseData);
-            var res = this.listViewHandleData(responseData[0]);
-            this.setState({
-                dataSource: this.state.dataSource.cloneWithRowsAndSections(res.dataBlob, res.sectionIDs, res.rowIDs),
+        var _this3 = this;
+
+        fetch("http://172.99.68.57/api/feeds", { method: "GET" }).then(function (response) {
+            return response.json();
+        }).then(function (responseData) {
+            var res = _this3.listViewHandleData(responseData[0]);
+            _this3.setState({
+                dataSource: _this3.state.dataSource.cloneWithRowsAndSections(res.dataBlob, res.sectionIDs, res.rowIDs),
                 loaded: true
             });
-        })
-        .done();
+        }).done();
     },
 
     listViewHandleData: function listViewHandleData(result) {
+        var _this4 = this;
+
         var data = {},
             sectionIDs = ['s0', 's1'],
             rowIDs = [[], []],
@@ -65,14 +67,13 @@ var contextapp = React.createClass({
         for (var i = 0; i < length; i++) {
             key = result.articles[i];
             rowIDs[0].push(key);
-            fetch("http://172.99.68.57/api/articles/" + key, {method: "GET"})
-            .then((response) => response.json())
-            .then((responseData) => {
+            fetch("http://172.99.68.57/api/articles/" + key, { method: "GET" }).then(function (response) {
+                return response.json();
+            }).then(function (responseData) {
                 data['s0:' + key] = responseData.name;
-            })
-            .done((response) => {
+            }).done(function (response) {
                 if (Object.keys(data).length >= length) {
-                    this.setState({
+                    _this4.setState({
                         isLoading: false
                     });
                 }
@@ -89,31 +90,27 @@ var contextapp = React.createClass({
     _renderRow: function _renderRow(rowData, sectionID, rowID) {
         var _this = this;
 
-        return React.createElement(
-            TouchableOpacity,
-                { onPress: function () {}},
-            React.createElement(
-                View,
-                { style: styles.rowStyle },
-                React.createElement(
-                    Text,
-                    { style: styles.rowText },
-                    rowData,
-                )
-            )
-        );
+        return React.createElement(TouchableOpacity, { onPress: function onPress() {} }, React.createElement(View, { style: styles.rowStyle }, React.createElement(Text, { style: styles.rowText }, rowData)));
     },
 
     render: function render() {
         var _this2 = this;
 
         if (this.state.isLoading) {
-            return <View><Text>Loading...</Text></View>;
+            return React.createElement(
+                View,
+                null,
+                React.createElement(
+                    Text,
+                    null,
+                    'Loading...'
+                )
+            );
         }
 
         return React.createElement(ListView, {
             dataSource: this.state.dataSource,
-            renderRow: function (rowData, sectionID, rowID, highlightRow) {
+            renderRow: function renderRow(rowData, sectionID, rowID, highlightRow) {
                 return _this2._renderRow(rowData);
             }
         });
