@@ -2,7 +2,7 @@
 
 import React, { Component, View, Text } from 'react-native';
 import {bindActionCreators} from 'redux';
-import News from '../components/news';
+import NewsFeed from '../components/news';
 import * as counterActions from '../actions/contextActions';
 import { connect } from 'react-redux';
 
@@ -27,7 +27,7 @@ class NewsApp extends Component {
     }
 
     return (
-      <News
+      <NewsFeed
         articles={state.articles}
         {...bindActionCreators(counterActions, dispatch)} />
     );

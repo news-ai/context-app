@@ -4,28 +4,34 @@ import React, {
   View,
   Text,
   ListView,
-  TouchableOpacity
+  TouchableHighlight,
+  AlertIOS
 } from 'react-native';
 
-const styles = StyleSheet.create({
-  button: {
-    width: 100,
-    height: 30,
-    padding: 10,
-    backgroundColor: 'lightgray',
-    alignItems: 'center',
+var styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    margin: 3
+    padding: 14,
+    backgroundColor: '#F6F6F6',
   },
-  rowStyle: {
-     paddingVertical: 20,
-     paddingLeft: 16,
-     borderBottomColor: '#E0E0E0',
-     borderBottomWidth: 1
+  separator: {
+    height: 1,
+    backgroundColor: '#CCCCCC',
+  },
+  thumb: {
+    width: 64,
+    height: 64,
+  },
+  text: {
+    flex: 1,
+  },
+  content: {
+    flex: 1
   }
 });
 
-export default class News extends React.Component {
+export default class NewsFeed extends React.Component {
   constructor(props) {
     super(props);
     this.dataBlob = {};
@@ -75,13 +81,18 @@ export default class News extends React.Component {
       };
   }
 
+  onSubmitPressed() {
+      
+  }
+
   _renderRow(rowData, sectionID, rowID) {
       return (
-          <TouchableOpacity>
-              <View style={styles.rowStyle}>
-                  <Text style={styles.rowText}>{rowData}</Text>
+          <TouchableHighlight onPress={(this.onSubmitPressed.bind(this))}>
+              <View style={styles.row}>
+                  <Text style={styles.text}>{rowData}</Text>
+                  <View style={styles.separator} />
               </View>
-          </TouchableOpacity>
+          </TouchableHighlight>
       );
   }
 
@@ -90,6 +101,7 @@ export default class News extends React.Component {
 
     return (
       <ListView
+        style={styles.content}
         dataSource={this.state.dataSource}
         renderRow={(rowData, sectionID, rowID, highlightRow) => this._renderRow(rowData, sectionID, rowID, highlightRow)}
       />
