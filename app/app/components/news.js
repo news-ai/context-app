@@ -8,6 +8,8 @@ import React, {
   AlertIOS
 } from 'react-native';
 
+var PTRView = require('react-native-pull-to-refresh')
+
 var styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
@@ -88,10 +90,10 @@ export default class NewsFeed extends React.Component {
   _renderRow(rowData, sectionID, rowID) {
       return (
           <TouchableHighlight onPress={(this.onSubmitPressed.bind(this))}>
-              <View style={styles.row}>
-                  <Text style={styles.text}>{rowData}</Text>
-                  <View style={styles.separator} />
-              </View>
+            <View style={styles.row}>
+                <Text style={styles.text}>{rowData}</Text>
+                <View style={styles.separator} />
+            </View>
           </TouchableHighlight>
       );
   }

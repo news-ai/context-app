@@ -5,10 +5,17 @@ import {bindActionCreators} from 'redux';
 import NewsFeed from '../components/news';
 import * as counterActions from '../actions/contextActions';
 import { connect } from 'react-redux';
+import PTRView from 'react-native-pull-to-refresh';
 
 class NewsApp extends Component {
   constructor(props) {
     super(props);
+  }
+
+  _refresh () {
+    return new Promise((resolve) => {
+      setTimeout(()=>{resolve()}, 2000)
+    });
   }
 
   render() {
@@ -27,9 +34,11 @@ class NewsApp extends Component {
     }
 
     return (
-      <NewsFeed
-        articles={state.articles}
-        {...bindActionCreators(counterActions, dispatch)} />
+      <PTRView onRefresh={this._refresh}>
+        <NewsFeed articles={state.articles}
+          {...bindActionCreators(counterActions, dispatch)}
+        />
+      </PTRView>
     );
   }
 }

@@ -4,10 +4,6 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-import { Router, Route, Link, BrowserHistory } from 'react-router'
-
-import { createHistory } from 'history'
-import { syncReduxAndRouter, routeReducer } from 'redux-simple-router'
 import * as reducers from '../reducers';
 import NewsApp from './newsApp';
 
@@ -20,7 +16,7 @@ store.dispatch(getFeed())
 
 var styles = StyleSheet.create({
     toolbar: {
-        backgroundColor: '#81c04d',
+        backgroundColor: '#0D5480',
         paddingTop: 30,
         paddingBottom: 10,
         flexDirection: 'row'
@@ -52,22 +48,22 @@ var styles = StyleSheet.create({
 export default class ContextApp extends Component {
   render() {
     return (
-    <Provider store={store}>
-        <View style={styles.mainContainer}>
-            <View style={styles.toolbar}>
-                <Text style={styles.toolbarTitle}>Context</Text>
+        <Provider store={store}>
+            <View style={styles.mainContainer}>
+                <View style={styles.toolbar}>
+                    <Text style={styles.toolbarTitle}>Context</Text>
+                </View>
+                <View style={styles.content}>
+                    <NavigatorIOS
+                        style={styles.navigationContainer}
+                        navigationBarHidden={true}
+                        initialRoute={{
+                            title: "NewsAI Home",
+                            component: NewsApp,
+                        }}/>
+                </View>
             </View>
-            <View style={styles.content}>
-                <NavigatorIOS
-                    style={styles.navigationContainer}
-                    navigationBarHidden={true}
-                    initialRoute={{
-                        title: "Navigator Example",
-                        component: NewsApp,
-                    }}/>
-            </View>
-        </View>
-    </Provider>
+        </Provider>
     );
   }
 }

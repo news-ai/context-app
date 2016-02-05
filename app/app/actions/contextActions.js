@@ -8,12 +8,14 @@ function receiveFeed(feed) {
 }
 
 export function getFeed() {
-  let contextURL = `http://172.99.68.57/api/feeds?t=${Date.now()}`;
+  let contextURL = `https://context.newsai.org/api/feeds`;
   return dispatch => {
     fetch(contextURL, { method: "GET" }).then(function (response) {
       return response.json();
     }).then(function (responseData) {
-      dispatch(receiveFeed(responseData.results[0]))
+      if (responseData.results && responseData.results.length > 0){
+        dispatch(receiveFeed(responseData.results[0]))
+      }
     }).done();
   }
 }
