@@ -8,7 +8,9 @@ import React, {
   AlertIOS
 } from 'react-native';
 
-var PTRView = require('react-native-pull-to-refresh')
+import NewsArticle from './newsArticle';
+
+var PTRView = require('react-native-pull-to-refresh');
 
 var styles = StyleSheet.create({
   row: {
@@ -56,7 +58,7 @@ export default class NewsFeed extends React.Component {
   componentWillMount() {
     var res = this.listViewHandleData(this.props.articles);
     this.setState({
-        dataSource: this.dataSource.cloneWithRowsAndSections(res.dataBlob,res.sectionIDs,res.rowIDs),
+        dataSource: this.dataSource.cloneWithRowsAndSections(res.dataBlob, res.sectionIDs, res.rowIDs),
         loaded: true
     });
   }
@@ -83,27 +85,34 @@ export default class NewsFeed extends React.Component {
       };
   }
 
-  onSubmitPressed() {
-      
+  _handleChangePage(newsId) {
+    this.props.navigator.push({
+      title: "Second Page",
+      component: NewsArticle,
+      passProps: {
+        newsId: newsId
+      }
+    });
   }
 
   _renderRow(rowData, sectionID, rowID) {
       return (
-          <TouchableHighlight onPress={(this.onSubmitPressed.bind(this))}>
-            <View style={styles.row}>
-                <Text style={styles.text}>{rowData}</Text>
-                <View style={styles.separator} />
-            </View>
-          </TouchableHighlight>
+        <TouchableHighlight onPress={this._handleChangePage.bind(this, rowData)}>
+          <View style={styles.row}>
+            <Text style={styles.text}>{rowData}</Text>
+            <View style={styles.separator} />
+          </View>
+        </TouchableHighlight>
       );
   }
 
   render() {
-    const { articles, refresh } = this.props;
+    const { articles, refresh, navigator } = this.props;
 
     return (
       <ListView
         style={styles.content}
+        navigator={this.props.navigator}
         dataSource={this.state.dataSource}
         renderRow={(rowData, sectionID, rowID, highlightRow) => this._renderRow(rowData, sectionID, rowID, highlightRow)}
       />

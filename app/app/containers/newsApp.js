@@ -2,7 +2,7 @@
 
 import React, { Component, View, Text } from 'react-native';
 import {bindActionCreators} from 'redux';
-import NewsFeed from '../components/news';
+import NewsFeed from '../components/newsFeed';
 import * as counterActions from '../actions/contextActions';
 import { connect } from 'react-redux';
 import PTRView from 'react-native-pull-to-refresh';
@@ -19,7 +19,7 @@ class NewsApp extends Component {
   }
 
   render() {
-    const { state, dispatch } = this.props;
+    const { state, dispatch, navigator } = this.props;
 
     if (state.isLoading) {
         return React.createElement(
@@ -36,7 +36,8 @@ class NewsApp extends Component {
     return (
       <PTRView onRefresh={this._refresh}>
         <NewsFeed articles={state.articles}
-          {...bindActionCreators(counterActions, dispatch)}
+          navigator={this.props.navigator}
+          {...bindActionCreators(counterActions, dispatch, navigator)}
         />
       </PTRView>
     );
