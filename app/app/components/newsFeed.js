@@ -67,14 +67,15 @@ export default class NewsFeed extends React.Component {
       var _this4 = this;
 
       var data = {},
-          sectionIDs = ['s0', 's1'],
-          rowIDs = [[], []],
-          key,
-          length = articles.length;
+        sectionIDs = ['s0'],
+        rowIDs = [[]],
+        key,
+        length = articles.length;
+      console.log(articles);
 
       for (var i = 0; i < length; i++) {
           key = articles[i].name;
-          data['s0:' + key] = key;
+          data['s0:' + key] = articles[i],
           rowIDs[0].push(key);
       }
 
@@ -85,21 +86,21 @@ export default class NewsFeed extends React.Component {
       };
   }
 
-  _handleChangePage(newsId) {
+  _handleChangePage(article) {
     this.props.navigator.push({
-      title: "Second Page",
+      title: "Article - " + article.name,
       component: NewsArticle,
       passProps: {
-        newsId: newsId
+        article: article
       }
     });
   }
 
-  _renderRow(rowData, sectionID, rowID) {
+  _renderRow(article) {
       return (
-        <TouchableHighlight onPress={this._handleChangePage.bind(this, rowData)}>
+        <TouchableHighlight onPress={this._handleChangePage.bind(this, article)}>
           <View style={styles.row}>
-            <Text style={styles.text}>{rowData}</Text>
+            <Text style={styles.text}>{article.name}</Text>
             <View style={styles.separator} />
           </View>
         </TouchableHighlight>
@@ -114,7 +115,7 @@ export default class NewsFeed extends React.Component {
         style={styles.content}
         navigator={this.props.navigator}
         dataSource={this.state.dataSource}
-        renderRow={(rowData, sectionID, rowID, highlightRow) => this._renderRow(rowData, sectionID, rowID, highlightRow)}
+        renderRow={(article, sectionID, rowID) => this._renderRow(article)}
       />
     );
   }

@@ -10,10 +10,10 @@ import React, {
 
 export default class NewsArticle extends React.Component {
   render() {
-    const { newsId } = this.props;
+    const { article } = this.props;
     return (
       <View>
-        <Text>{newsId}</Text>
+        <Text>{ article.name }</Text>
       </View>
     );
   }
