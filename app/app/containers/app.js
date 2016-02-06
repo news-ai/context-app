@@ -33,10 +33,9 @@ var styles = StyleSheet.create({
         flex: 1
     },
     mainContainer: {
-        flex: 1,
+        flex: 1
     },
     content: {
-        backgroundColor: '#ebeef0',
         flex: 1,
         marginTop: 0
     },

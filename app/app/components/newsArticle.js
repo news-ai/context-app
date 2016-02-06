@@ -13,7 +13,7 @@ export default class NewsArticle extends React.Component {
     const { article } = this.props;
     return (
       <View>
-        <Text>{ article.name }</Text>
+        <Text>{ article.basic_summary }</Text>
       </View>
     );
   }
